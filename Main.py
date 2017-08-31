@@ -1,3 +1,5 @@
+"""Twitter bot that tweets out "Weezy F Baby and the F is for" + a word."""
+
 import twitter
 import os
 
