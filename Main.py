@@ -23,9 +23,10 @@ while True:
         total = 7586
     else:
         total = 1055
+    partOfSpeech = random.choice(['noun', 'adjective', 'verb-transitive'])
+
     searchResults = wordsAPI.searchWords(query,
-                                         includePartOfSpeech='noun,adjective,\
-                                         verb-transitive',
+                                         includePartOfSpeech=partOfSpeech,
                                          caseSensitive=False,
                                          skip=random.randrange(1, total),
                                          limit=1)
