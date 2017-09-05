@@ -27,6 +27,9 @@ while True:
                                          caseSensitive=False,
                                          skip=random.randrange(1, total),
                                          limit=1)
+
+    print(searchResults)
+    print(searchResults.totalResults)
     word = searchResults.searchResults[0].word
 
 
