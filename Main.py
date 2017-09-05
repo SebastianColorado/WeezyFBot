@@ -19,8 +19,9 @@ wordsAPI = WordsApi.WordsApi(wordnikApi)
 
 while True:
     query = random.choices(['f', 'ph'], [30, 1], k=1)[0]
-    partOfSpeech = random.choice(["noun", "adjective", "verb-transitive"])
-    print(partOfSpeech)
+    partOfSpeech = random.choices(["noun", "adjective", "verb-transitive"],
+                                  [7000, 2000, 400],
+                                  k=1)[0]
 
     if query == 'f':
         if partOfSpeech == "noun":
@@ -43,8 +44,6 @@ while True:
                                          skip=random.randrange(1, total),
                                          limit=1)
 
-    print(searchResults)
-    print(searchResults.totalResults)
     word = searchResults.searchResults[0].word
 
     try:
