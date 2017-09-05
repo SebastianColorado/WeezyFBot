@@ -10,7 +10,7 @@ api = twitter.Api(consumer_key=os.environ['CONSUMER_KEY'],
                   access_token_secret=os.environ['ACCESS_TOKEN_SECRET'])
 
 try:
-        status = api.PostUpdate('Weezy F. Baby and the F is for Foodie')
+        status = api.PostUpdate('Weezy F. Baby and the F is for Freedom')
 except UnicodeDecodeError:
         print("Your message could not be encoded. Perhaps it contains \
         non-ASCII characters?")
