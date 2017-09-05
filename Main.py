@@ -1,7 +1,7 @@
 """Twitter bot that tweets out "Weezy F Baby and the F is for" + a word."""
 
 import twitter
-import wordnik
+from wordnik import *
 import os
 import sys
 import random
@@ -14,8 +14,8 @@ twitterApi = twitter.Api(consumer_key=os.environ['CONSUMER_KEY'],
 
 apiUrl = 'http://api.wordnik.com/v4'
 apiKey = os.environ['WORDNIK_KEY']
-swagger = wordnik.swagger.ApiClient(apiKey, apiUrl)
-wordsAPI = wordnik.WordsApi.WordsApi(swagger)
+wordnikApi = swagger.ApiClient(apiKey, apiUrl)
+wordsAPI = WordsApi.WordsApi(wordnikApi)
 
 while True:
     query = random.choices(['f', 'ph'], [30, 1], k=1)[0]
