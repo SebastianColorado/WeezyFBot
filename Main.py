@@ -19,11 +19,23 @@ wordsAPI = WordsApi.WordsApi(wordnikApi)
 
 while True:
     query = random.choices(['f', 'ph'], [30, 1], k=1)[0]
+    partOfSpeech = random.choice(["noun", "adjective", "verb-transitive"])
+    print(partOfSpeech)
+
     if query == 'f':
-        total = 7586
+        if partOfSpeech == "noun":
+            total = 5436
+        elif partOfSpeech == "adjective":
+            total = 1819
+        else:
+            total = 333
     else:
-        total = 1055
-    partOfSpeech = random.choice(['noun', 'adjective', 'verb-transitive'])
+        if partOfSpeech == "noun":
+            total = 823
+        elif partOfSpeech == "adjective":
+            total = 215
+        else:
+            total = 19
 
     searchResults = wordsAPI.searchWords(query,
                                          includePartOfSpeech=partOfSpeech,
@@ -36,7 +48,8 @@ while True:
     word = searchResults.searchResults[0].word
 
     try:
-        status = twitterApi.PostUpdate('Weezy F. Baby and the F is for' + word)
+        status = twitterApi.\
+            PostUpdate('Weezy F. Baby and the F is for ' + word)
     except UnicodeDecodeError:
         print("Your message could not be encoded. Perhaps it contains \
         non-ASCII characters?")
