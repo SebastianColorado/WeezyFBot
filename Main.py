@@ -1,10 +1,11 @@
 """Twitter bot that tweets out "Weezy F Baby and the F is for" + a word."""
 
 import twitter
-from wordnik import *
+import wordnik
 import os
 import sys
 import random
+import time
 
 twitterApi = twitter.Api(consumer_key=os.environ['CONSUMER_KEY'],
                          consumer_secret=os.environ['CONSUMER_SECRET'],
@@ -13,17 +14,18 @@ twitterApi = twitter.Api(consumer_key=os.environ['CONSUMER_KEY'],
 
 apiUrl = 'http://api.wordnik.com/v4'
 apiKey = os.environ['WORDNIK_KEY']
-wordnikApi = swagger.ApiClient(apiKey, apiUrl)
-wordsAPI = WordsApi.WordsApi(wordnikApi)
+swagger = wordnik.swagger.ApiClient(apiKey, apiUrl)
+wordsAPI = wordnik.WordsApi.WordsApi(swagger)
 
 while True:
-    query = random.choices(['f','ph'], [30,1], k=1)[0]
+    query = random.choices(['f', 'ph'], [30, 1], k=1)[0]
     if query == 'f':
         total = 7586
     else:
         total = 1055
     searchResults = wordsAPI.searchWords(query,
-                                         includePartOfSpeech='noun,adjective,verb-transitive',
+                                         includePartOfSpeech='noun,adjective,\
+                                         verb-transitive',
                                          caseSensitive=False,
                                          skip=random.randrange(1, total),
                                          limit=1)
@@ -31,7 +33,6 @@ while True:
     print(searchResults)
     print(searchResults.totalResults)
     word = searchResults.searchResults[0].word
-
 
     try:
         status = twitterApi.PostUpdate('Weezy F. Baby and the F is for' + word)
@@ -43,4 +44,4 @@ while True:
         sys.exit(2)
     print("%s just posted: %s" % (status.user.name, status.text))
 
-    sleep(300)
+    time.sleep(300)
