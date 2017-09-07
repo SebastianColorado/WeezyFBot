@@ -21,9 +21,10 @@ while True:
     startingPhrase = random.choice(['Weezy F. Baby and the F is for',
                                     'Weezy F., the F is for',
                                     'Weezy F. and the F is for',
-                                    'I\'m Weezy F and the F is for',
                                     'Weezy F. Baby, the F is for'])
+
     query = random.choices(['f', 'ph'], [30, 1], k=1)[0]
+
     partOfSpeech = random.choices(["noun", "adjective", "verb-transitive"],
                                   [7000, 2000, 400],
                                   k=1)[0]
