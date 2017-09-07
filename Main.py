@@ -22,6 +22,11 @@ while True:
                                     'Weezy F., the F is for',
                                     'Weezy F. and the F is for',
                                     'Weezy F. Baby, the F is for'])
+    trends = twitterApi.GetTrendsCurrent()
+    print(trends)
+    print(trends[0].name)
+
+    time.sleep(1000)
 
     query = random.choices(['f', 'ph'], [30, 1], k=1)[0]
 
