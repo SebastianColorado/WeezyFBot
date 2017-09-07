@@ -3,7 +3,6 @@
 import twitter
 from wordnik import *
 import os
-import sys
 import random
 import time
 
@@ -17,16 +16,31 @@ apiKey = os.environ['WORDNIK_KEY']
 wordnikApi = swagger.ApiClient(apiKey, apiUrl)
 wordsAPI = WordsApi.WordsApi(wordnikApi)
 
-while True:
-    startingPhrase = random.choice(['Weezy F. Baby and the F is for',
-                                    'Weezy F., the F is for',
-                                    'Weezy F. and the F is for',
-                                    'Weezy F. Baby, the F is for'])
-    trends = twitterApi.GetTrendsCurrent()
-    print(trends)
-    print(trends[0].name)
+phraseVariations = ['Weezy F. Baby and the F is for',
+                    'Weezy F., the F is for',
+                    'Weezy F. and the F is for',
+                    'Weezy F. Baby, the F is for']
 
-    time.sleep(1000)
+lastTrendTweeted = ''
+
+while True:
+
+    startingPhrase = random.choice(phraseVariations)
+
+    postedTrend = False
+    trends = twitterApi.GetTrendsCurrent()+twitterApi.GetTrendsWoeid(23424977)
+    for trend in trends:
+        if trend.name != lastTrendTweeted and (trend.name.startswith("f") or
+           trend.name.startswith("#f") or trend.name.startswith("F") or
+           trend.name.startswith("#F")):
+
+            status = twitterApi.PostUpdate(startingPhrase + ' ' + trend.name)
+
+            print("%s just posted: %s" % (status.user.name, status.text))
+            postedTrend = True
+            lastTrendTweeted = trend.name
+            time.sleep(60*60*6)
+            break
 
     query = random.choices(['f', 'ph'], [30, 1], k=1)[0]
 
@@ -57,15 +71,7 @@ while True:
 
     word = searchResults.searchResults[0].word
 
-    try:
-        status = twitterApi.\
-            PostUpdate(startingPhrase + ' ' + word)
-    except UnicodeDecodeError:
-        print("Your message could not be encoded. Perhaps it contains \
-        non-ASCII characters?")
-        print("Try explicitly specifying the encoding with \
-        the --encoding flag")
-        sys.exit(2)
+    status = twitterApi.PostUpdate(startingPhrase + ' ' + word)
     print("%s just posted: %s" % (status.user.name, status.text))
 
     time.sleep(60*60*3)
