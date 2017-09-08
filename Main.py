@@ -36,11 +36,14 @@ while True:
 
             status = twitterApi.PostUpdate(startingPhrase + ' ' + trend.name)
 
-            print("%s just posted: %s" % (status.user.name, status.text))
+            print("%s just posted trend: %s" % (status.user.name, status.text))
             postedTrend = True
             lastTrendTweeted = trend.name
-            time.sleep(60*60*6)
+            time.sleep(60*60*3)
             break
+
+    if postedTrend:
+        continue
 
     query = random.choices(['f', 'ph'], [30, 1], k=1)[0]
 
