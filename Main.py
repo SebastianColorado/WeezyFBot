@@ -5,6 +5,7 @@ from wordnik import *
 import os
 import random
 import time
+from collections import deque
 
 twitterApi = twitter.Api(consumer_key=os.environ['CONSUMER_KEY'],
                          consumer_secret=os.environ['CONSUMER_SECRET'],
@@ -21,29 +22,30 @@ phraseVariations = ['Weezy F. Baby and the F is for',
                     'Weezy F. and the F is for',
                     'Weezy F. Baby, the F is for']
 
-lastTrendTweeted = ''
+lastTrendsTweeted = deque(maxlen=5)
 
 while True:
 
     startingPhrase = random.choice(phraseVariations)
 
-    postedTrend = False
-    trends = twitterApi.GetTrendsCurrent()+twitterApi.GetTrendsWoeid(23424977)
+    trends = twitterApi.GetTrendsWoeid(23424977)+twitterApi.GetTrendsCurrent()
     for trend in trends:
-        if trend.name != lastTrendTweeted and (trend.name.startswith("f") or
-           trend.name.startswith("#f") or trend.name.startswith("F") or
-           trend.name.startswith("#F")):
+        if trend.name not in lastTrendsTweeted and \
+          (trend.name.startswith("f") or trend.name.startswith("#f") or
+           trend.name.startswith("F") or trend.name.startswith("#F")):
 
-            status = twitterApi.PostUpdate(startingPhrase + ' ' + trend.name)
+            try:
+                status = twitterApi.PostUpdate(startingPhrase +
+                                               ' ' + trend.name)
+            except twitter.error.TwitterError as e:
+                print('There was an error: ' + e.message[0]['message'])
+                break
 
             print("%s just posted trend: %s" % (status.user.name, status.text))
-            postedTrend = True
-            lastTrendTweeted = trend.name
+            lastTrendsTweeted.appendleft(trend.name)
+
             time.sleep(60*60*3)
             break
-
-    if postedTrend:
-        continue
 
     query = random.choices(['f', 'ph'], [30, 1], k=1)[0]
 
@@ -74,7 +76,13 @@ while True:
 
     word = searchResults.searchResults[0].word
 
-    status = twitterApi.PostUpdate(startingPhrase + ' ' + word)
+    try:
+        status = twitterApi.PostUpdate(startingPhrase +
+                                       ' ' + trend.name)
+    except twitter.error.TwitterError as e:
+        print('There was an error:' + e.message[0]['message'])
+        continue
+
     print("%s just posted: %s" % (status.user.name, status.text))
 
     time.sleep(60*60*3)
