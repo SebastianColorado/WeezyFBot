@@ -101,7 +101,7 @@ while True:
     # topics tweeted recently
     try:
         status = twitterApi.PostUpdate(startingPhrase +
-                                       ' ' + trend.name)
+                                       ' ' + word)
     except twitter.error.TwitterError as e:
         print('There was an error: ' + e.message[0]['message'])
         continue
