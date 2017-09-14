@@ -61,8 +61,8 @@ while True:
             except twitter.error.TwitterError as e:
                 print('There was an error: ' + e.message[0]['message'])
                 continue
-            # Sleep for 3 hours after tweeting
-            time.sleep(60*60*3)
+            # Sleep for 2 hours after tweeting
+            time.sleep(60*60*2)
             break
 
     # Pick f or ph randomly with a higher probability of picking f
@@ -108,4 +108,4 @@ while True:
 
     print("%s just posted: %s" % (status.user.name, status.text))
 
-    time.sleep(60*60*3)
+    time.sleep(60*60*2)
