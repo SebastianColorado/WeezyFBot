@@ -21,6 +21,21 @@ apiKey = os.environ['WORDNIK_KEY']
 wordnikApi = swagger.ApiClient(apiKey, apiUrl)
 wordsAPI = WordsApi.WordsApi(wordnikApi)
 
+
+def postTweet(startPhrase, endPhrase):
+    """Post tweet with given parameters."""
+    try:
+        status = twitterApi.PostUpdate(startPhrase + ' ' + endPhrase)
+
+    except twitter.error.TwitterError as e:
+        print('There was an error: ' + e.message[0]['message'])
+        return (False, None)
+
+    else:
+        print("%s just posted: %s" % (status.user.name, status.text))
+        return (True, endPhrase)
+
+
 # Define variations of the phrase used in the tweet
 phraseVariations = ['Weezy F. Baby and the F is for',
                     'Weezy F., the F is for',
@@ -48,21 +63,16 @@ while True:
 
             # Attempt to post the tweet and add the trend to the list of
             # topics tweeted recently
-            try:
-                status = twitterApi.PostUpdate(startingPhrase +
-                                               ' ' + trend.name)
-                print("%s just posted trend: %s" % (status.user.name,
-                                                    status.text))
+            result = postTweet(startingPhrase, trend.name)
+
+            if result[0]:
                 # Note: when a deque with a max length is full, appending
                 # on one side will remove the object at the end of the
                 # opposite side before adding the new object
-                lastTrendsTweeted.appendleft(trend.name)
+                lastTrendsTweeted.appendleft(result[1])
+                # Sleep for 2 hours after tweeting
+                time.sleep(60*60*2)
 
-            except twitter.error.TwitterError as e:
-                print('There was an error: ' + e.message[0]['message'])
-                continue
-            # Sleep for 2 hours after tweeting
-            time.sleep(60*60*2)
             break
 
     # Pick f or ph randomly with a higher probability of picking f
@@ -97,15 +107,6 @@ while True:
     # Get the word from the response
     word = searchResults.searchResults[0].word
 
-    # Attempt to post the tweet and add the trend to the list of
-    # topics tweeted recently
-    try:
-        status = twitterApi.PostUpdate(startingPhrase +
-                                       ' ' + word)
-    except twitter.error.TwitterError as e:
-        print('There was an error: ' + e.message[0]['message'])
-        continue
-
-    print("%s just posted: %s" % (status.user.name, status.text))
+    postTweet(startingPhrase, word)
 
     time.sleep(60*60*2)
