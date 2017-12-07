@@ -106,7 +106,7 @@ while True:
     startingPhrase = random.choice(phraseVariations)
 
     # Randomly choose wether to post a word or a trend
-    trendOrWord = random.choices(['Trend', 'Word'], [2, 3])[0]
+    trendOrWord = random.choices(['Trend', 'Word'], [2, 8])[0]
 
     if trendOrWord == 'Trend':
 
