@@ -123,4 +123,4 @@ while True:
     postTweet(startingPhrase, endingPhrase)
 
     # Sleep after posting a tweet
-    time.sleep(60*60*2)
+    time.sleep(60*60*3)
